@@ -1,41 +1,41 @@
 #include <stdarg.h>
 #include <stdio.h>
 /**
- * _printf - Printf function
- * @format: format.
- * Return: Printed chars.
+ * _printf - Our printf function.
+ * @format: The formatting string.
+ * Return: Number of characters printed.
  */
 int _printf(const char *format, ...)
 {
 va_list args;
-int count = 0, i, j;
-char c;
+int count = 0, i;
+char *str, c;
+if (!format)
+return (-1);
 va_start(args, format);
-for (i = 0; format[i] != '\0'; i++)
+for (i = 0; format[i]; i++)
 {
 if (format[i] == '%' && (format[i + 1] == 'c'
 || format[i + 1] == 's' || format[i + 1] == '%'))
 {
-switch (format[i + 1])
+switch (format[++i])
 {
 case 'c':
-c = va_arg(args, int);
-putchar(c);
+putchar(c = va_arg(args, int));
 count++;
-i++;
 break;
 case 's':
+str = va_arg(args, char *);
+if (!str)
+str = "(null)";
+while (*str)
 {
-char *str = va_arg(args, char *);
-for (j = 0; str[j] != '\0'; j++, count++)
-{
-putchar(str[j]);
-} i++;
+putchar(*str++);
+count++;
 } break;
 case '%':
 putchar('%');
 count++;
-i++;
 break;
 }
 }
